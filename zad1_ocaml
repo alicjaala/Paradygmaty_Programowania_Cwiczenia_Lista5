@@ -1,0 +1,23 @@
+type 'a llist = LNil | LCons of 'a * 'a llist Lazy.t;;
+
+let rec lfrom k =
+  LCons(k, lazy (lfrom (k + 1)));;
+
+let rec ltake = function
+  |(0, _) -> []
+  |(_, LNil) -> []
+  |(n, LCons(x, lazy xs)) -> x ::ltake(n - 1, xs);;
+
+
+let rec repeat_elem k x xs =
+  if k <= 0 then Lazy.force xs
+  else LCons (x, lazy (repeat_elem (k - 1) x xs));;
+
+let rec lrepeat k lxs =
+  match lxs with
+  |LNil -> LNil
+  |LCons (x, lazy xs) -> repeat_elem k x (lazy (lrepeat k xs));;
+
+let l1 = lfrom 3;;
+let lista = lrepeat 3 l1;;
+ltake (9, lista);;
