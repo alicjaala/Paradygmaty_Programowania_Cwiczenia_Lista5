@@ -1,0 +1,13 @@
+type 'a llist = LNil | LCons of 'a * 'a llist Lazy.t;;
+
+let rec ltake = function
+  |(0, _) -> []
+  |(_, LNil) -> []
+  |(n, LCons(x, lazy xs)) -> x ::ltake(n - 1, xs);;
+
+
+let rec lfib a b =
+  LCons(a, lazy(lfib b (a + b)));;
+
+let l1 = lfib 0 1;;
+ltake (9, l1);;
