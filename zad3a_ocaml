@@ -1,0 +1,21 @@
+type 'a lBT = LEmpty | LNode of 'a * (unit -> 'a lBT) * (unit -> 'a lBT);;
+
+let rec lWszerz drzewo =
+  let rec pom kolejka =
+    match kolejka with
+    |[] -> []
+    |LEmpty :: reszta -> pom reszta
+    |LNode (v, lewy, prawy) :: reszta ->
+      v :: pom (reszta @ [lewy (); prawy ()])
+  in
+  pom [drzewo];;
+
+  let tree = LNode (1, 
+  (fun () -> LNode (2, 
+    (fun () -> LNode (4, (fun () -> LEmpty), (fun () -> LEmpty))), 
+    (fun () -> LNode (5, (fun () -> LEmpty), (fun () -> LEmpty))))), 
+  (fun () -> LNode (3, 
+    (fun () -> LEmpty), 
+    (fun () -> LEmpty))));;
+
+lWszerz tree;;
